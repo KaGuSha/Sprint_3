@@ -34,23 +34,30 @@ public class CourierClient extends RestAssuredClient {
     }
 
     @Step("Send a DELETE request to remove courier to /api/v1/courier/{id}")
-    public void sendDelete(int courierId) {
+    public Response sendDelete(int courierId) {
 
         String json = "{\"id\": \"" + courierId + "\"}";
 
-        reqSpec
+        return reqSpec
                 .pathParam("courierId", courierId)
                 .and()
                 .body(json)
                 .when()
-                .delete(DELETE)
-                .then().statusCode(SC_OK);
+                .delete(DELETE);
     }
 
     @Step("Compare response code and body with expected code 201 and ok has true")
     public void compareResponseCodeAndBodyAboutCreation(Response response) {
         response.then().assertThat()
                 .statusCode(SC_CREATED)
+                .and()
+                .body("ok", is(true));
+    }
+
+    @Step("Compare response code and body with expected code 200 and ok has true")
+    public void compareDeleteResponseCodeAndBodyOk(Response response) {
+        response.then().assertThat()
+                .statusCode(SC_OK)
                 .and()
                 .body("ok", is(true));
     }
@@ -95,5 +102,4 @@ public class CourierClient extends RestAssuredClient {
                 .and()
                 .body("message", is("Учетная запись не найдена"));
     }
-
 }

@@ -96,6 +96,7 @@ public class CourierLoginTest {
         courierId = courierClient.sendPostToCourierLogin(courierCredsCorrect)
                 .then().extract().path("id");
 
-        courierClient.sendDelete(courierId);
+        Response response = courierClient.sendDelete(courierId);
+        courierClient.compareDeleteResponseCodeAndBodyOk(response);
     }
 }

@@ -143,7 +143,7 @@ public class CourierCreationTest {
             courierId = response.then().extract().path("id");
 
             if (courierId != 0) {
-                courierClient.sendDelete(courierId);
+                courierClient.compareDeleteResponseCodeAndBodyOk(courierClient.sendDelete(courierId));
             }
         }
     }
