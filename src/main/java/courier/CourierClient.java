@@ -7,6 +7,7 @@ import forall.RestAssuredClient;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.apache.http.HttpStatus.*;
 
 public class CourierClient extends RestAssuredClient {
 
@@ -43,13 +44,13 @@ public class CourierClient extends RestAssuredClient {
                 .body(json)
                 .when()
                 .delete(DELETE)
-                .then().statusCode(200);
+                .then().statusCode(SC_OK);
     }
 
     @Step("Compare response code and body with expected code 201 and ok has true")
     public void compareResponseCodeAndBodyAboutCreation(Response response) {
         response.then().assertThat()
-                .statusCode(201)
+                .statusCode(SC_CREATED)
                 .and()
                 .body("ok", is(true));
     }
@@ -57,7 +58,7 @@ public class CourierClient extends RestAssuredClient {
     @Step("Compare response code and message with expected code 409 and expected text of message - Этот логин уже используется")
     public void compareResponseCodeAndMessageWithError409(Response response) {
         response.then().assertThat()
-                .statusCode(409)
+                .statusCode(SC_CONFLICT)
                 .and()
                 .body("message", is("Этот логин уже используется"));
         //отличается текст startsWith
@@ -66,7 +67,7 @@ public class CourierClient extends RestAssuredClient {
     @Step("Compare response code and message with expected code 400 and expected text of message - Недостаточно данных для создания учетной записи")
     public void compareCodeAndMessageWithError400(Response response) {
         response.then().assertThat()
-                .statusCode(400)
+                .statusCode(SC_BAD_REQUEST)
                 .and()
                 .body("message", is("Недостаточно данных для создания учетной записи"));
     }
@@ -74,7 +75,7 @@ public class CourierClient extends RestAssuredClient {
     @Step("Compare response code with expected code 200 and id has not null value")
     public void compareLoginResponseCodeAndBody200IdNotNull(Response response) {
         response.then().assertThat()
-                .statusCode(200)
+                .statusCode(SC_OK)
                 .and()
                 .body("id", notNullValue());
     }
@@ -82,7 +83,7 @@ public class CourierClient extends RestAssuredClient {
     @Step("Compare response code and message with expected code 400 and expected text of message - Недостаточно данных для входа")
     public void compareLoginResponseCodeAndBody400Message(Response response) {
         response.then().assertThat()
-                .statusCode(400)
+                .statusCode(SC_BAD_REQUEST)
                 .and()
                 .body("message", is("Недостаточно данных для входа"));
     }
@@ -90,7 +91,7 @@ public class CourierClient extends RestAssuredClient {
     @Step("Compare response code and message with expected code 404 and expected text of message - Учетная запись не найдена")
     public void compareLoginResponseCodeAndBody404Message(Response response) {
         response.then().assertThat()
-                .statusCode(404)
+                .statusCode(SC_NOT_FOUND)
                 .and()
                 .body("message", is("Учетная запись не найдена"));
     }

@@ -7,6 +7,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.apache.http.HttpStatus.*;
 
 public class OrdersClient extends RestAssuredClient{
 
@@ -42,14 +43,14 @@ public class OrdersClient extends RestAssuredClient{
     @Step("Compare response code and response body about successful creation a new order")
     public void compareResponseCodeAndBodyAboutOrderCreation(Response response) {
         response.then().assertThat()
-                .statusCode(201)
+                .statusCode(SC_CREATED)
                 .and()
                 .body("track", notNullValue());
     }
 
     @Step("Compare response code with expected code 200")
     public void compareResponseCode200(Response response) {
-        response.then().assertThat().statusCode(200);
+        response.then().assertThat().statusCode(SC_OK);
     }
 
     @Step("Check that response body has the list of orders")
